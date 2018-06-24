@@ -2,7 +2,7 @@
 
 - Author: @yjkim5426
 
-Todo list on web using vanila JS.
+Todo list on web just using vanila JS.
 
 Requirements
 ------------
