@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Todo List</title>
+
+</head>
+
+<body>
+    <!-- ADD ITEM -->
+    <h1>ADD ITEM</h1>
+    <hr>
+    <div>
+        <input type="text" id="txtItemName"></input>
+        <button id="btnAdd">ADD</button>
+    </div>
+
+    <!-- TODO -->
+    <h1>TODO</h1>
+    <hr>
+    <div id="todoList">
+
+    </div>
+
+    <!-- COMPLETED -->
+    <h1>COMPLETED</h1>
+    <hr>
+    <div id="completedList">
+
+    </div>
+
+
+    <script>
+
+        var txtItemName = document.getElementById("txtItemName");
+        var btnAdd = document.getElementById("btnAdd");
+        var chkMove = document.getElementById("chkMove");
+        var btnEdit = document.getElementById("btnEdit");
+        var btnDelete = document.getElementById("btnDelete");
+
+        var todoList = [];
+        var CompletedList = [];
+
+        btnAdd.addEventListener("click", AddTodo);
+
+        ShowTodoList();
+        ShowCompletedList();
+
+        function AddTodo() {
+            if (txtItemName.value != "") {
+                var todoList = GetTodoList();
+                todoList.push(txtItemName.value);
+            }
+            else {
+                alert("Insert some text!");
+            }
+
+            txtItemName.value = "";
+
+            ShowTodoList();
+        }
+
+        function ShowTodoList() {
+            var todoList = GetTodoList();
+
+            if (todoList.length > 0) {
+                var todoListHtml = "<ul>";
+                for (var i = 0; i < todoList.length; i++) {
+                    todoListHtml += "<li><input class='chkMove' id='" + i + "' type='checkbox'></input><input class='txtTodoitem' type='text' value='" + todoList[i] + "' disabled></input><button class='edit' id='" + i + "'>Edit</button><button class='remove' id='" + i + "'>Delete</button></li>";
+
+                    document.getElementById("todoList").innerHTML = todoListHtml;
+                }
+                todoListHtml += "</ul>";
+
+                for (var i = 0; i < todoList.length; i++) {
+                    var moveCheckbox = document.getElementsByClassName('chkMove');
+                    var editButtons = document.getElementsByClassName('edit');
+                    var deleteButtons = document.getElementsByClassName('remove');
+                    
+                    moveCheckbox[i].addEventListener('click', moveItem);
+                    editButtons[i].addEventListener('click', editItem);
+                    deleteButtons[i].addEventListener('click', removeItem);
+                }
+            }
+            else {
+                document.getElementById("todoList").innerHTML = '';
+            }
+        }
+
+        function ShowCompletedList() {
+            var completedList = GetCompletedList();
+
+            if (completedList.length > 0) {
+                var completedListHtml = "<ul>";
+                for (var i = 0; i < completedList.length; i++) {
+                    completedListHtml += "<li></input><input class='txtCompleteditem' type='text' value='" + completedList[i] + "' disabled></input><button class='completedEdit' id='" + i + "'>Edit</button><button class='completedRemove' id='" + i + "'>Delete</button></li>";
+                    
+                    document.getElementById("completedList").innerHTML = completedListHtml;
+                }
+                completedListHtml += "</ul>";
+
+                for (var i = 0; i < completedList.length; i++) {
+                    var editButtons = document.getElementsByClassName('completedEdit');
+                    var deleteButtons = document.getElementsByClassName('completedRemove');
+                    
+                    editButtons[i].addEventListener('click', completedEditItem);
+                    deleteButtons[i].addEventListener('click', completedRemoveItem);
+                }
+            }
+            else {
+                document.getElementById("completedList").innerHTML = '';
+            }
+        }
+
+        function completedEditItem() {
+            var completedList = GetCompletedList();
+            id = this.getAttribute('id');
+            var txtCompletedItems = document.getElementsByClassName('txtCompleteditem');
+
+            if (txtCompletedItems[id].disabled == true) {
+                txtCompletedItems[id].disabled = false;
+            }
+            else {
+                completedList[id] = txtCompletedItems[id].value;
+                ShowCompletedList();
+            }
+        }
+
+        function completedRemoveItem() {
+            var id = this.getAttribute('id');
+            var completedList = GetCompletedList();
+            completedList.splice(id, 1);
+
+            ShowCompletedList();
+        }
+
+        function completedList() {
+            return CompletedList;
+        }
+
+        function moveItem() {
+            var todoList = GetTodoList();
+            id = this.getAttribute('id');
+            CompletedList.push(todoList[id]);
+
+            todoList.splice(id, 1);
+
+            ShowCompletedList();
+            ShowTodoList();
+        }
+
+        function editItem() {
+            var todoList = GetTodoList();
+            id = this.getAttribute('id');
+            var txtTodoitems = document.getElementsByClassName('txtTodoitem');
+
+            if (txtTodoitems[id].disabled == true) {
+                txtTodoitems[id].disabled = false;
+            }
+            else {
+                todoList[id] = txtTodoitems[id].value;
+                ShowTodoList();
+            }
+        }
+
+        function removeItem() {
+            var id = this.getAttribute('id');
+            var todoList = GetTodoList();
+            todoList.splice(id, 1);
+
+            ShowTodoList();
+        }
+
+        function GetTodoList() {
+            return todoList;
+        }
+
+        function GetCompletedList() {
+            return CompletedList;
+        }
+
+    </script>
+</body>
+
+</html>
