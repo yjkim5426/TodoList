@@ -42,7 +42,7 @@
         var btnDelete = document.getElementById("btnDelete");
 
         var todoList = [];
-        var completedList = [];
+        var CompletedList = [];
 
         btnAdd.addEventListener("click", addTodo);
 
@@ -51,8 +51,8 @@
 
         function addTodo() {
             if (txtItemName.value != "") {
-                var list = getTodoList();
-                list.push(txtItemName.value);
+                var todoList = GetTodoList();
+                todoList.push(txtItemName.value);
             }
             else {
                 alert("Insert some text!");
@@ -64,19 +64,18 @@
         }
 
         function showTodoList() {
-            var list = getTodoList();
+            var todoList = GetTodoList();
 
-            if (list.length > 0) {
+            if (todoList.length > 0) {
                 var todoListHtml = "<ul>";
-            var list = getTodoList();
-                for (var i = 0; i < list.length; i++) {
-                    todoListHtml += "<li><input class='chkMove' id='" + i + "' type='checkbox'></input><input class='txtTodoitem' type='text' value='" + list[i] + "' disabled></input><button class='edit' id='" + i + "'>Edit</button><button class='remove' id='" + i + "'>Delete</button></li>";
+                for (var i = 0; i < todoList.length; i++) {
+                    todoListHtml += "<li><input class='chkMove' id='" + i + "' type='checkbox'></input><input class='txtTodoitem' type='text' value='" + todoList[i] + "' disabled></input><button class='edit' id='" + i + "'>Edit</button><button class='remove' id='" + i + "'>Delete</button></li>";
 
                     document.getElementById("todoList").innerHTML = todoListHtml;
                 }
                 todoListHtml += "</ul>";
 
-                for (var i = 0; i < list.length; i++) {
+                for (var i = 0; i < todoList.length; i++) {
                     var moveCheckbox = document.getElementsByClassName('chkMove');
                     var editButtons = document.getElementsByClassName('edit');
                     var deleteButtons = document.getElementsByClassName('remove');
@@ -92,18 +91,18 @@
         }
 
         function showCompletedList() {
-            var list = getCompletedList();
+            var completedList = GetCompletedList();
 
-            if (list.length > 0) {
+            if (completedList.length > 0) {
                 var completedListHtml = "<ul>";
-                for (var i = 0; i < list.length; i++) {
-                    completedListHtml += "<li></input><input class='txtCompleteditem' type='text' value='" + list[i] + "' disabled></input><button class='completedEdit' id='" + i + "'>Edit</button><button class='completedRemove' id='" + i + "'>Delete</button></li>";
+                for (var i = 0; i < completedList.length; i++) {
+                    completedListHtml += "<li></input><input class='txtCompleteditem' type='text' value='" + completedList[i] + "' disabled></input><button class='completedEdit' id='" + i + "'>Edit</button><button class='completedRemove' id='" + i + "'>Delete</button></li>";
 
                     document.getElementById("completedList").innerHTML = completedListHtml;
                 }
                 completedListHtml += "</ul>";
 
-                for (var i = 0; i < list.length; i++) {
+                for (var i = 0; i < completedList.length; i++) {
                     var editButtons = document.getElementsByClassName('completedEdit');
                     var deleteButtons = document.getElementsByClassName('completedRemove');
 
@@ -117,7 +116,7 @@
         }
 
         function completedEditItem() {
-            var list = getCompletedList();
+            var completedList = GetCompletedList();
             id = this.getAttribute('id');
             var txtCompletedItems = document.getElementsByClassName('txtCompleteditem');
 
@@ -125,38 +124,36 @@
                 txtCompletedItems[id].disabled = false;
             }
             else {
-                list[id] = txtCompletedItems[id].value;
+                completedList[id] = txtCompletedItems[id].value;
                 showCompletedList();
             }
         }
 
         function completedRemoveItem() {
             var id = this.getAttribute('id');
-            var list = getCompletedList();
-            list.splice(id, 1);
+            var completedList = GetCompletedList();
+            completedList.splice(id, 1);
 
             showCompletedList();
         }
 
         function completedList() {
-            return completedList;
+            return CompletedList;
         }
 
         function moveItem() {
-            var tdList = getTodoList();
-            var cList = getCompletedList();
+            var todoList = GetTodoList();
             id = this.getAttribute('id');
+            CompletedList.push(todoList[id]);
 
-            cList.push(tdList[id]);
-
-            tdList.splice(id, 1);
+            todoList.splice(id, 1);
 
             showCompletedList();
             showTodoList();
         }
 
         function editItem() {
-            var list = getTodoList();
+            var todoList = GetTodoList();
             id = this.getAttribute('id');
             var txtTodoitems = document.getElementsByClassName('txtTodoitem');
 
@@ -164,24 +161,24 @@
                 txtTodoitems[id].disabled = false;
             }
             else {
-                list[id] = txtTodoitems[id].value;
+                todoList[id] = txtTodoitems[id].value;
                 showTodoList();
             }
         }
 
         function removeItem() {
             var id = this.getAttribute('id');
-            var list = getTodoList();
-            list.splice(id, 1);
+            var todoList = GetTodoList();
+            todoList.splice(id, 1);
 
             showTodoList();
         }
 
-        function getTodoList() {
+        function GetTodoList() {
             return todoList;
         }
 
-        function getCompletedList() {
+        function GetCompletedList() {
             return CompletedList;
         }
 
